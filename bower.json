@@ -1,0 +1,24 @@
+{
+  "name": "jquery-guard",
+  "version": "0.0.1",
+  "keywords": [
+    "jquery-plugin",
+    "jquery",
+    "form validation",
+    "validation"
+  ],
+  "repository": {
+  	"type": "git",
+  	"url": "https://github.com/mjarmoc/guard"
+  },
+  "bugs": {
+    "url": "https://github.com/mjarmoc/guard/issues"
+  },
+  "author": {
+    "name": "Michal Jarmoc",
+    "email": "m.jarmoc@post.pl",
+    "url": "https://github.com/mjarmoc"
+  },
+	"main": "src/guard.js",
+	"license": "MIT"
+}

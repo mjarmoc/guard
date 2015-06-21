@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Guard</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+		<script src="../src/guard.js"></script>
+	</head>
+	<body>
+		<form action="submit.html">
+			<fieldset>
+				<div class="form-group">
+					<div class="form-control"><input type="text" data-guard="required,email"></div>
+					<div class="form-control"><select data-guard="required"><option selected disabled>Choose</option><option>Option 1</option></select></div>
+					<div class="form-control"><div class="checkbox"><input type="checkbox" data-guard="required"></div></div>
+					<div class="form-control"><div class="radio"><input type="radio" name="radio1" value="1" data-guard="required"><input type="radio" name="radio1" value="2" data-guard="required"><input type="radio" name="radio1" value="3" data-guard="required"></div></div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<div class="form-group">
+					<div class="form-control"><input type="text" data-guard="required"></div>
+				</div>
+			</fieldset>
+			<button id="check">check second fieldset</button>
+			<input type="submit" value="submit form">
+		</form>
+		<script>
+			$(function() {
+				$('#check').click(function(e){
+					e.preventDefault();
+					guard.check(1);
+				});
+				$("form").guard({
+					sections: 'fieldset'
+				},
+				{
+					requiredCheckbox: "Please check me"
+				}).data('guard');
+			});
+		</script>
+	</body>
+</html>
