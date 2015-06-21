@@ -18,7 +18,7 @@ var guard = {
 	options: {
 		sections: false,
 		live: true,
-		parentClass: 'form-control'
+		parentClass: 'form-group'
 	},
 	
 	// Default english errors
@@ -29,7 +29,9 @@ var guard = {
 		requiredRadio: 'Please select an option',
 		email: 'Please enter a valid email format - login@host.domain',
 		number: 'Please enter a numerical value',
-		zipcode: 'Please enter a valid zip code format xx-xxx'
+		zipcode: 'Please enter a valid zip code format xx-xxx',
+        minLength: 'The field has to contain at least {x} signs',
+        maxLength: 'The field has to contain at most {x} signs'
 	},
 	
 	// Rules 
@@ -67,16 +69,30 @@ var guard = {
 		zipcode: function(node){
 			var expression = new RegExp(/^\d{2}\-\d{3}$/);
 			return expression.test(node.val()) || guard.errors.zipcode;
-		}
+		},
+        maxLength: function(node, length){
+            return node.val().length <= length || guard.errors.maxLength.replace('{x}', length);
+        },
+        minLength: function(node, length){
+            return node.val().length >= length || guard.errors.maxLength.replace('{x}', length);
+        }
 	},
 	
 	// Public method: validate single field
 	validate: function(field){
 		var field = $(field), 
 			rules = field.data('guard').split(','),
-			valid;
+			argument,valid;
+
 		$.each(rules, function(index,rule){
-			valid = guard.rules[rule](field);
+            
+            // If rule is complex, split name and argument
+            if(rule.indexOf('{') !== -1){
+                argument = rule.slice(rule.indexOf('{') + 1, rule.indexOf('}'));
+                rule = rule.slice(0, rule.indexOf('{'));
+            }
+            
+			valid = guard.rules[rule](field,argument);
 			if(valid === true){
 				guard._cleanError(field);
 			}
