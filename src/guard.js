@@ -65,11 +65,11 @@ var guard = {
 			var expression = new RegExp(/^[\-\+]?(\d+|\d+\.?\d+)$/);
 			return expression.test(node.val()) || guard.errors.number;
 		},
-		maxLength: function(node, length){
-    	return node.val().length <= length || guard.errors.maxLength.replace('{x}', length);
+		maxLength: function(node, length, maxLength, length){
+    	return length <= maxLength || guard.errors.maxLength.replace('{x}', maxLength);
 		},
-    minLength: function(node, length){
-    	return node.val().length >= length || guard.errors.minLength.replace('{x}', length);
+    minLength: function(node, minLength, length){
+    	return length >= minLength || guard.errors.minLength.replace('{x}', minLength);
     }
 	},
 
@@ -87,7 +87,15 @@ var guard = {
         rule = rule.slice(0, rule.indexOf('{'));
       }
 
-			valid = guard.rules[rule](field,argument);
+			// Validate only required and non-empty fields
+			if (field.attr('type') == 'text'){
+				var length = field.val().length;
+				if (length !== 0 || rule === 'required') valid = guard.rules[rule](field,argument,length);
+				else valid = true;
+			}
+			else {
+				valid = guard.rules[rule](field,argument);
+			}
 
 			if(valid === true){
 				guard._cleanError(field);
