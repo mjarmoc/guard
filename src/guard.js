@@ -76,27 +76,31 @@ var guard = {
 	// Public method: validate single field
 	validate: function(field){
 		var field = $(field),
-			rules = field.data('guard').split(','),
-			argument,valid;
+				rules = field.data('guard').split(','),
+				argument, valid;
 
 		$.each(rules, function(index,rule){
 
-            // If rule is complex, split name and argument
-            if(rule.indexOf('{') !== -1){
-                argument = rule.slice(rule.indexOf('{') + 1, rule.indexOf('}'));
-                rule = rule.slice(0, rule.indexOf('{'));
-            }
+      // If rule is complex, split name and argument
+      if(rule.indexOf('{') !== -1){
+        argument = rule.slice(rule.indexOf('{') + 1, rule.indexOf('}'));
+        rule = rule.slice(0, rule.indexOf('{'));
+      }
 
 			valid = guard.rules[rule](field,argument);
+
 			if(valid === true){
 				guard._cleanError(field);
 			}
+
 			else {
 				guard._createError(field,valid);
 				return false;
 			}
+
 			return valid;
 		});
+
 	},
 
 	// Collect fields to validate
@@ -111,12 +115,11 @@ var guard = {
 		else {
 			this.fields = form.find(this.options.sections).eq(section).find('[data-guard]');
 		}
-
 	},
 
 	_cleanError: function(field){
 		var parent = field.parents('.' + this.options.parentClass),
-			 error = parent.find('.guard-error');
+			  error = parent.find('.guard-error');
 		if (parent.hasClass('guard-invalid')){
 			parent.removeClass('guard-invalid');
 		}
@@ -146,7 +149,6 @@ var guard = {
 		});
 
 		return (guard.invalid.length == 0) ? true : false;
-
 	},
 
 	// Init
@@ -175,7 +177,10 @@ var guard = {
 		// Call validation on submit
 		this.$form.submit(function(e){
 			e.preventDefault();
-			if(guard.check()) this.submit();
+			if(guard.check()){
+				if(typeof(guard.options.onSubmit) == 'function' ) guard.options.onSubmit.call(this,e);
+				else this.submit();
+			}
 		});
 
 		// return this so that we can chain and use the bridge with less code.
