@@ -65,7 +65,7 @@ var guard = {
 			var expression = new RegExp(/^[\-\+]?(\d+|\d+\.?\d+)$/);
 			return expression.test(node.val()) || guard.errors.number;
 		},
-		maxLength: function(node, length, maxLength, length){
+		maxLength: function(node, maxLength, length){
     	return length <= maxLength || guard.errors.maxLength.replace('{x}', maxLength);
 		},
     minLength: function(node, minLength, length){
