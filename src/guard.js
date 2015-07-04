@@ -1,26 +1,26 @@
 /*!
 * Guard | Jquery validation plugin
-* Author: Michal Jarmoc 
+* Author: Michal Jarmoc
 * Author page: http://github.com/mjarmoc
 * Licensed under the MIT license
 */
 
 // Guard Object
 var guard = {
-	
+
 	// Array for fields
 	fields: [],
-	
+
 	// Array for invalid fields
 	invalid: [],
-	
+
 	// Default options
 	options: {
 		sections: false,
 		live: true,
 		parentClass: 'form-group'
 	},
-	
+
 	// Default english errors
 	errors: {
 		required: 'Please enter a value',
@@ -29,17 +29,16 @@ var guard = {
 		requiredRadio: 'Please select an option',
 		email: 'Please enter a valid email format - login@host.domain',
 		number: 'Please enter a numerical value',
-		zipcode: 'Please enter a valid zip code format xx-xxx',
-        minLength: 'The field has to contain at least {x} signs',
-        maxLength: 'The field has to contain at most {x} signs'
+		minLength: 'The field has to contain at least {x} signs',
+		maxLength: 'The field has to contain at most {x} signs'
 	},
-	
-	// Rules 
+
+	// Rules
 	rules: {
       required: function(node){
 			if(node.is('input')){
 				switch (node.attr('type')){
-					default: 
+					default:
 						return node.val().length > 0 || guard.errors.required;
 					break;
 					case 'checkbox':
@@ -52,7 +51,7 @@ var guard = {
 				}
 			}
 			else if (node.is('select')){
-					return node[0].selectedIndex !== 0 || guard.errors.requiredSelect;				
+					return node[0].selectedIndex !== 0 || guard.errors.requiredSelect;
 			}
 			else if (node.is('textarea')){
 				return node.val().length > 0 || guard.errors.required;
@@ -66,32 +65,28 @@ var guard = {
 			var expression = new RegExp(/^[\-\+]?(\d+|\d+\.?\d+)$/);
 			return expression.test(node.val()) || guard.errors.number;
 		},
-		zipcode: function(node){
-			var expression = new RegExp(/^\d{2}\-\d{3}$/);
-			return expression.test(node.val()) || guard.errors.zipcode;
+		maxLength: function(node, length){
+    	return node.val().length <= length || guard.errors.maxLength.replace('{x}', length);
 		},
-        maxLength: function(node, length){
-            return node.val().length <= length || guard.errors.maxLength.replace('{x}', length);
-        },
-        minLength: function(node, length){
-            return node.val().length >= length || guard.errors.maxLength.replace('{x}', length);
-        }
+    minLength: function(node, length){
+    	return node.val().length >= length || guard.errors.minLength.replace('{x}', length);
+    }
 	},
-	
+
 	// Public method: validate single field
 	validate: function(field){
-		var field = $(field), 
+		var field = $(field),
 			rules = field.data('guard').split(','),
 			argument,valid;
 
 		$.each(rules, function(index,rule){
-            
+
             // If rule is complex, split name and argument
             if(rule.indexOf('{') !== -1){
                 argument = rule.slice(rule.indexOf('{') + 1, rule.indexOf('}'));
                 rule = rule.slice(0, rule.indexOf('{'));
             }
-            
+
 			valid = guard.rules[rule](field,argument);
 			if(valid === true){
 				guard._cleanError(field);
@@ -103,20 +98,20 @@ var guard = {
 			return valid;
 		});
 	},
-	
-	// Collect fields to validate 
+
+	// Collect fields to validate
 	_collect: function(form, section){
-		
+
 		// If there are no sections or a section is not specified get all fields
 		if(!this.options.sections || section === undefined){
 			this.fields = form.find('[data-guard]');
 		}
-		
-		// Get the particular section	
+
+		// Get the particular section
 		else {
 			this.fields = form.find(this.options.sections).eq(section).find('[data-guard]');
 		}
-		
+
 	},
 
 	_cleanError: function(field){
@@ -129,7 +124,7 @@ var guard = {
 			error.remove();
 		}
 	},
-	
+
 	_createError: function(field, error){
 		var parent = field.parents('.' + this.options.parentClass);
 		if (!parent.hasClass('guard-invalid')){
@@ -137,53 +132,56 @@ var guard = {
 		}
 		guard.invalid.push(field);
 	},
-	
+
 	// Public method: check section or form
 	check: function(section){
-		
+
 		// Reset state
 		guard.invalid = [];
-		
+
 		// Collect fields
 		this._collect(this.$form, section);
 		$.each(this.fields, function(index,field){
 			guard.validate(field);
 		});
-		
+
 		return (guard.invalid.length == 0) ? true : false;
-		
+
 	},
-	
+
 	// Init
-	init: function (options, errors, form) { 
+	init: function (options, errors, rules, form) {
 
 		// Mix in the passed-in options with the default options
 		this.options = $.extend({}, this.options, options);
-		
+
 		// Mix in the passed custom errors with the default errors
 		this.errors = $.extend({}, this.errors, errors);
+
+		// Mix in the passed custom errors with the default errors
+		this.rules = $.extend({}, this.rules, rules);
 
 		// Save the element reference, both as a jQuery reference and a normal reference
 		this.form  = form;
 		this.$form = $(form);
-		
+
 		// Bind events for live validation
 		if(this.options.live){
 			$('[data-guard]').bind('change', function(event, element){
 				guard.validate(this);
 			});
 		}
-		
+
 		// Call validation on submit
 		this.$form.submit(function(e){
 			e.preventDefault();
 			if(guard.check()) this.submit();
 		});
-		
-		// return this so that we can chain and use the bridge with less code. 
+
+		// return this so that we can chain and use the bridge with less code.
 		return this;
 	}
-	
+
 };
 
 // Object.create support test, and fallback for browsers without it
@@ -197,7 +195,7 @@ if (typeof Object.create !== "function") {
 
 (function($){
   // Start a plugin
-  $.fn.guard = function(options, errors) {
+  $.fn.guard = function(options, errors, rules) {
     // Don't act on absent elements -via Paul Irish's advice
     if ( this.length ) {
       return this.each(function(){
@@ -205,7 +203,7 @@ if (typeof Object.create !== "function") {
         var myGuard = Object.create(guard);
 
         // Run the initialization function of the guard
-        guard.init(options, errors, this); // `this` refers to the element
+        guard.init(options, errors, rules, this); // `this` refers to the element
 
         // Save the instance of the guard object in the element's data store
         $.data(this, 'guard', guard);
