@@ -1,0 +1,5 @@
+.guard {
+  $error: red;
+  &-invalid {}
+  &-error {color:$error; font-size:14px;}
+}
