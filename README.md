@@ -1,11 +1,16 @@
 # guard
-Jquery plugin that guards your forms Allows to validate single fieldsets and whole form. As simple, as it could be.
+
+Jquery plugin that guards your forms.
+
+* As simple and fast as it could be.
+* Allows you to validate single fields, custom sections of form (i.e.fieldsets) and whole form.
+* Provides public methods, to check validation inside your own code.
+* Behaves well with form nodes styling scripts.
+* Allows you to pass custom error messages and validation rules.
 
 ![Build Status](https://travis-ci.org/mjarmoc/guard.svg?branch=master)
 
-
 # Usage
-
 
 # Options
 * `parentClass` : `string` || default : `form-group` || class of the parent containing the field, the element will get the `guard-invalid` class and an error node appened
@@ -33,5 +38,5 @@ We are in pre-release phase.
 
 # To Do
 * Documentation
-* Callbacks
+* Mocha Tests
 * Provide default styles
