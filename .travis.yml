@@ -1,9 +1,6 @@
-language: ruby
+language: node_js, ruby
 rvm:
   - 2.0.0-p247
-language: node_js
-before_install:
-- bundle install compass
 node_js:
 - 0.1
 before_install:
@@ -11,6 +8,7 @@ before_install:
 before_script:
 - npm install
 - bower install
+- bundle install compass
 script:
 - grunt travis
 deploy:
