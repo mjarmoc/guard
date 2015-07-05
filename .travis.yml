@@ -1,10 +1,17 @@
 language: node_js
 node_js:
-  - 0.10
+- 0.1
 before_install:
-  - npm install -g bower grunt-cli
+- npm install -g bower grunt-cli
 before_script:
-  - npm install
-  - bower install
+- npm install
+- bower install
 script:
-  - grunt travis
+- grunt travis
+deploy:
+  provider: releases
+  api_key:
+    secure: V9X+DQi6x8ylNvViYVeguYnahxwkVl0YENbBSnsPzFBAJ6p44esOOEOoHXD/w6m235vlhCrvooIEJIY1sleexO8YRtLPpOUXGAxJFdx/x1rJcoYSMOeoXhIaAV+8v+18s+aK0PDGodI/NoJrwlQuXxwEQWzliy/7NhL1IcIfx6Xv+ECLH/VrmaqR8uRkV5jcN+m1d9Xte92UYMuctIdz6XJRXUxVvtJ/vgSkZ8rZDoTcqvBcA+7IgzuBnJ2DiKNXFdUcovoKxdpjQq11sivmPPWxNws8Mg13iiZybUp9JsrsDiX53boOIaieTID6RHbr0zRFAqIhde9w+VQx+raazC5Gg3sLd3DoCx2QM7xUU6dhIfyy/RV16SoU2qfcXmvA/EfizRcxgHdJ0C+gCorlpw4IGuLqo0vlVcjpdPRIwso4EvETl7rTvnDom/sJkDl9LYrpFmSHg6Xz3lFZBuf4bJVE7dBWMxGaxG9L+02A8vlX8xa0Nstpj8GF1umKja7WFpme3uLs20LXY6sU9YhaHav1GKFX38J5xlynpL/W8PuBa+DRuVh1geE01LrXx/VhkUlDZrmVlWr6UCU71fhVsYWEkeJWGqc29s1DzJ7k8FWpafjuUVx5Kq4LVXXP2RfBU3+Y/fgDV2u6RkudvmqOjwVv/mkfsGxBh3ODg031wXY=
+  file: dist/
+  on:
+    repo: mjarmoc/guard
