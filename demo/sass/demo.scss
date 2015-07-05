@@ -1,0 +1,28 @@
+@import 'compass';
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+
+$border: #e3e3e3;
+
+body {
+  background:#f2e9e9; font:16px/24px Roboto;
+}
+
+.demo {width:900px; margin:100px auto;
+  h1 {font-size:0;
+    &:before {content:url(images/logo.png); }
+  }
+  code {background:#eeeff3; padding:3px 5px;}
+  &-wrap {background:#fff; padding:20px;}
+  fieldset {border:1px solid $border; padding:20px; margin:0 0 12px;}
+  label {font-size:14px;}
+  .form-group {margin:0 0 12px; padding:0 0 12px; border-bottom:1px solid $border;
+    span {display:inline-block;}
+    & > label {display: inline-block; width:320px;}
+  }
+  .radio, .checkbox {display:inline-block;}
+  [type="text"], textarea {width:300px; height:30px; transition: all 0.5s; border:1px solid $border; @include box-shadow(#e3e3e3 1px 1px 1px); padding:0 10px;}
+  textarea {height:90px;}
+  %button {background:#565656; border:1px solid $border; text-transform: uppercase; padding:5px; color:#fff; cursor: pointer;}
+  button {@extend %button;}
+  [type="submit"]{@extend %button;}
+}

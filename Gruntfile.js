@@ -47,22 +47,45 @@ module.exports = function(grunt) {
 			}
 		},
 
+		// Compile sass
+		compass: {
+			dist: {
+				options: {
+					sassDir: 'src/sass/',
+		      cssDir: 'dist/',
+		      environment: 'production'
+		    },
+			},
+			demo: {
+				options: {
+				sassDir: 'demo/sass/',
+				cssDir: 'demo/',
+				environment: 'production'
+			}
+		}
+	},
+
 		// watch for changes to source
 		// Better than calling grunt a million times
 		// (call 'grunt watch')
 		watch: {
 		    files: ['src/*'],
-		    tasks: ['default']
+		    tasks: ['default'],
+				compass: {
+					files: ['demo/sass/demo.scss'],
+					tasks: ['compass:demo']
+				}
 		}
 
 	});
 
 	grunt.loadNpmTasks("grunt-contrib-concat");
+	grunt.loadNpmTasks("grunt-contrib-compass");
 	grunt.loadNpmTasks("grunt-contrib-jshint");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-contrib-watch");
 
-	grunt.registerTask("build", ["concat", "uglify"]);
+	grunt.registerTask("build", ["concat", "uglify", "compass"]);
 	grunt.registerTask("default", ["build"]);
 	grunt.registerTask("travis", ["default"]);
 
