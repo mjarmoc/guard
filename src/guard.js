@@ -88,7 +88,7 @@ var guard = {
       }
 
 			// Validate only required and non-empty fields
-			if (field.attr('type') == 'text'){
+			if (field.attr('type') == 'text' || field.is('textarea')){
 				var length = field.val().length;
 				if (length !== 0 || rule === 'required') valid = guard.rules[rule](field,argument,length);
 				else valid = true;
