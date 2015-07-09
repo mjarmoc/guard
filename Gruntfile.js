@@ -49,13 +49,6 @@ module.exports = function(grunt) {
 
 		// Compile sass
 		compass: {
-			dist: {
-				options: {
-					sassDir: 'src/sass/',
-		      cssDir: 'dist/',
-		      environment: 'production'
-		    },
-			},
 			demo: {
 				options: {
 				sassDir: 'demo/sass/',

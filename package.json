@@ -1,10 +1,11 @@
 {
   "name": "jquery-guard",
-  "version": "0.0.4",
-  "description": "A jump-start for jQuery plugins development.",
+  "version": "1.0.0",
+  "description": "Jquery plugin that guards your forms.",
   "keywords": [
     "jquery-plugin",
     "jquery",
+    "forms",
     "form validation",
     "validation"
   ],
