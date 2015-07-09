@@ -12,6 +12,27 @@ Jquery plugin that guards your forms.
 
 # Usage
 
+Download and wire the plugin:
+
+`bower install --save-dev jquery-guard`
+
+Make a plugin instance:
+
+`var guard = $(formSelector).guard(options, errors, rules);`
+
+`var guard = $(#form).guard({sections:'fieldset', onSubmit: function(e){this.submit;}}, errors, rules);`
+
+Suppose that you have a long form with 4 steps / parts / sections. Suppose you want to validate a section, before loading the next one:
+
+`$('.goToNextSection').click(function(e){
+    e.preventDefault();
+    if (guard.check($(this).parents('fieldset').index()) $.get('step2.html');
+  });`
+
+# Languages
+
+
+
 # Options
 * `parentClass` : `string` || default : `form-group` || class of the parent containing the field, the element will get the `guard-invalid` class and an error node appened
 * `sections` : `string` or `false` || default : `false` || if the form contains sections, that needs to be validated separatly (i.e. form steps) then pass the DOM selector
@@ -34,9 +55,7 @@ Every callback function has the form set as `this` value and `event` passed to i
 * `onSubmit(e)` : called during submit event, if the form is valid. If not specified, the form will normally submit.
 
 # Version
-We are in pre-release phase.
+1.0.0
 
 # To Do
-* Documentation
 * Mocha Tests
-* Provide default styles
