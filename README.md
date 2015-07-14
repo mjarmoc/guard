@@ -22,18 +22,31 @@ Make a plugin instance:
 
 for example:
 
-`var guard = $(#form).guard({sections:'fieldset', onSubmit: function(e){this.submit;}}, errors, rules);`
+```js
+var guard = $(#form).guard(
+	{
+		sections:'fieldset', 
+		onSubmit: function(e){this.submit;}
+	}, 
+	errors, 
+	rules
+);
+```
 
 Guard chosen fields with a rules using `data-guard="rulename"`:
 
-`<input type="text" data-guard="required">`
+```html
+<input type="text" data-guard="required">
+```
 
 Suppose that you have a long form with 4 steps / parts / sections. Suppose you want to validate a section, before loading the next one. Just use the `check` public method:
 
-`$('.goToNextSection').click(function(e){
+```js
+$('.goToNextSection').click(function(e){
     e.preventDefault();
     if (guard.check($(this).parents('fieldset').index()) $.get('step2.html');
-  });`
+  });
+```
 
 # Languages
 You can pass in custom or translated error messages. Simply pass in an object structures as the on in file `src/lang/pl.js'
