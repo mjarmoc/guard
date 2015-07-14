@@ -1,6 +1,6 @@
 {
   "name": "jquery-guard",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "keywords": [
     "jquery-plugin",
     "jquery",
@@ -14,11 +14,14 @@
   "bugs": {
     "url": "https://github.com/mjarmoc/guard/issues"
   },
+  "dependencies": {
+    "jquery": "~2.0.0"
+  },
   "author": {
     "name": "Michal Jarmoc",
     "email": "m.jarmoc@post.pl",
     "url": "https://github.com/mjarmoc"
   },
-	"main": "src/guard.js",
+	"main": "dist/guard.js",
 	"license": "MIT"
 }

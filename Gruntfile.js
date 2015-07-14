@@ -12,8 +12,8 @@ module.exports = function(grunt) {
 				" *  <%= pkg.description %>\n" +
 				" *  <%= pkg.homepage %>\n" +
 				" *\n" +
-				" *  Made by <%= pkg.author.name %>\n" +
-				" *  Under <%= pkg.license %> License\n" +
+				" *  Author: <%= pkg.author.name %> || <%= pkg.author.url %> \n" +
+				" *  Licensed under <%= pkg.license %> License\n" +
 				" */\n"
 		},
 
@@ -78,7 +78,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-contrib-watch");
 
-	grunt.registerTask("build", ["concat", "uglify", "compass"]);
+	grunt.registerTask("build", ["concat", "uglify"]);
 	grunt.registerTask("default", ["build"]);
 	grunt.registerTask("travis", ["default"]);
 
