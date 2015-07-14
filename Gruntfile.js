@@ -30,7 +30,7 @@ module.exports = function(grunt) {
 
 		// Lint definitions
 		jshint: {
-			files: ["src/guard.js"],
+			files: ["dist/guard.js"],
 			options: {
 				jshintrc: ".jshintrc"
 			}

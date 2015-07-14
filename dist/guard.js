@@ -1,10 +1,10 @@
 /*
  *  jquery-guard - v1.0.0
  *  Jquery plugin that guards your forms.
- *  
+ *  https://github.com/mjarmoc/guard
  *
- *  Made by Michal Jarmoc
- *  Under MIT License
+ *  Author: Michal Jarmoc || https://github.com/mjarmoc 
+ *  Licensed under MIT License
  */
 /*!
 * Guard | Jquery validation plugin
