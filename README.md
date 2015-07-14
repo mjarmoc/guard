@@ -1,5 +1,7 @@
 # guard
 
+![Build Status](https://travis-ci.org/mjarmoc/guard.svg?branch=master)
+
 Jquery plugin that guards your forms.
 
 * As simple and fast as it could be.
@@ -7,8 +9,6 @@ Jquery plugin that guards your forms.
 * Provides public methods, to check validation inside your own code.
 * Behaves well with form nodes styling scripts.
 * Allows you to pass custom error messages and validation rules.
-
-![Build Status](https://travis-ci.org/mjarmoc/guard.svg?branch=master)
 
 # Usage
 
@@ -20,9 +20,15 @@ Make a plugin instance:
 
 `var guard = $(formSelector).guard(options, errors, rules);`
 
+for example:
+
 `var guard = $(#form).guard({sections:'fieldset', onSubmit: function(e){this.submit;}}, errors, rules);`
 
-Suppose that you have a long form with 4 steps / parts / sections. Suppose you want to validate a section, before loading the next one:
+Guard chosen fields with a rules using `data-guard="rulename"`:
+
+`<input type="text" data-guard="required">`
+
+Suppose that you have a long form with 4 steps / parts / sections. Suppose you want to validate a section, before loading the next one. Just use the `check` public method:
 
 `$('.goToNextSection').click(function(e){
     e.preventDefault();
@@ -30,8 +36,7 @@ Suppose that you have a long form with 4 steps / parts / sections. Suppose you w
   });`
 
 # Languages
-
-
+You can pass in custom or translated error messages. Simply pass in an object structures as the on in file `src/lang/pl.js'
 
 # Options
 * `parentClass` : `string` || default : `form-group` || class of the parent containing the field, the element will get the `guard-invalid` class and an error node appened
@@ -45,6 +50,8 @@ Suppose that you have a long form with 4 steps / parts / sections. Suppose you w
 * email
 * maxLength[x]
 * minLength[x]
+
+You can also pass in custom rules.
 
 # Public Methods
 * `check(section)` : the `section` is an `int` and represents the section index number : returns `boolean` || check if the section is valid (there are no invalid fields). If the section argument is empty, then it will check the whole form.
