@@ -67,7 +67,7 @@ You can pass in custom or translated error messages. Simply pass in an object st
 You can also pass in custom rules.
 
 # Public Methods
-* `check(section)` : the `section` is an `int` and represents the section index number : returns `boolean` || check if the section is valid (there are no invalid fields). If the section argument is empty, then it will check the whole form.
+* `check(form, section)` : the form is a jquery selector and the `section` is an `int` and represents the section index number : returns `boolean` || check if the section is valid (there are no invalid fields). If the section argument is empty, then it will check the whole form.
 * `validate(field)` : the `field` is a DOM selector : return `boolean` || check if the particular field is valid
 
 # Callbacks

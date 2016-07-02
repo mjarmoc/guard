@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Guard</title>
+		<meta charset="utf-8">
+		<link href="demo.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="demo">
+			<h1>Guard</h1>
+			<div class="demo-wrap">
+				<form action="submit.html">
+					<fieldset>
+						<h2>First form</h2>
+							<div class="form-group"><label>Required</label><input type="text" data-guard="required"></div>
+					</fieldset>
+					<button id="check">check second fieldset</button>
+					<input type="submit" value="submit form">
+				</form>
+				<form action="submit2.html">
+					<fieldset>
+						<h2>Second form</h2>
+							<div class="form-group"><label>Required</label><input type="text" data-guard="required"></div>
+					</fieldset>
+					<button id="check">check second fieldset</button>
+					<input type="submit" value="submit form">
+				</form>
+			</div>
+		</div>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+		<script src="../src/guard.js"></script>
+		<script src="../src/lang/pl.js"></script>
+		<script>
+			$(function() {
+				$('#check').click(function(e){
+					e.preventDefault();
+					guard.check(1);
+				});
+				$("form").guard({
+					sections: 'fieldset',
+					onSubmit: function(e){console.log(e);}
+				},
+				{
+					number: 'Please enter numbers only',
+				},
+				pl.rules).data('guard');
+			});
+		</script>
+	</body>
+</html>

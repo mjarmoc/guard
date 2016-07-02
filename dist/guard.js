@@ -38,7 +38,8 @@ var guard = {
 		email: 'Please enter a valid email format - login@host.domain',
 		number: 'Please enter a numerical value',
 		minLength: 'The field has to contain at least {x} signs',
-		maxLength: 'The field has to contain at most {x} signs'
+		maxLength: 'The field has to contain at most {x} signs',
+		isLength: 'The field has to contain {x} signs',
 	},
 
 	// Rules
@@ -76,9 +77,12 @@ var guard = {
 		maxLength: function(node, maxLength, length){
     	return length <= maxLength || guard.errors.maxLength.replace('{x}', maxLength);
 		},
-    minLength: function(node, minLength, length){
-    	return length >= minLength || guard.errors.minLength.replace('{x}', minLength);
-    }
+	    minLength: function(node, minLength, length){
+	    	return length >= minLength || guard.errors.minLength.replace('{x}', minLength);
+	    },
+		isLength: function(node, isLength, length){
+	    	return node.val().length == isLength || guard.errors.isLength.replace('{x}', isLength);
+	    }
 	},
 
 	// Public method: validate single field
@@ -153,13 +157,13 @@ var guard = {
 	},
 
 	// Public method: check section or form
-	check: function(section){
+	check: function(form,section){
 
 		// Reset state
 		guard.invalid = [];
 
 		// Collect fields
-		this._collect(this.$form, section);
+		this._collect(form, section);
 		$.each(this.fields, function(index,field){
 			guard.validate(field);
 		});
@@ -169,6 +173,9 @@ var guard = {
 
 	// Init
 	init: function (options, errors, rules, form) {
+
+		var self = this,
+			prototype = Object.getPrototypeOf(self);
 
 		// Mix in the passed-in options with the default options
 		this.options = $.extend({}, this.options, options);
@@ -193,8 +200,9 @@ var guard = {
 		// Call validation on submit
 		this.$form.submit(function(e){
 			e.preventDefault();
-			if(guard.check()){
-				if(typeof(guard.options.onSubmit) == 'function' ) guard.options.onSubmit.call(this,e);
+			if(prototype.check(self.$form)){
+				if(typeof(self.options.beforeSubmit) == 'function' ) self.options.beforeSubmit.call(this,e);
+				if(typeof(self.options.onSubmit) == 'function' ) self.options.onSubmit.call(this,e);
 				else this.submit();
 			}
 		});
@@ -221,13 +229,14 @@ if (typeof Object.create !== "function") {
     if ( this.length ) {
       return this.each(function(){
         // Create a new speaker object via the Prototypal Object.create
-        var myGuard = Object.create(guard);
+
+		var myGuard = Object.create(guard);
 
         // Run the initialization function of the guard
-        guard.init(options, errors, rules, this); // `this` refers to the element
+        myGuard.init(options, errors, rules, this); // `this` refers to the element
 
         // Save the instance of the guard object in the element's data store
-        $.data(this, 'guard', guard);
+        $.data(this, 'myguard', myGuard);
       });
     }
   };
