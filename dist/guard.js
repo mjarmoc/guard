@@ -1,5 +1,5 @@
 /*
- *  jquery-guard - v1.0.0
+ *  jquery-guard - v1.2.0
  *  Jquery plugin that guards your forms.
  *  https://github.com/mjarmoc/guard
  *
@@ -13,24 +13,30 @@
 * Licensed under the MIT license
 */
 
-// Guard Object
-var guard = {
+// Guard Contructor
+var Guard = function(options, errors, rules, form){
+
+	var guard = this;
+
+	// Save the element reference, both as a jQuery reference and a normal reference
+	this.form  = form;
+	this.$form = $(form);
 
 	// Array for fields
-	fields: [],
+	this.fields = [],
 
-	// Array for invalid fields
-	invalid: [],
+	// Array for invalid field
+	this.invalid = [],
 
 	// Default options
-	options: {
+	this.options = {
 		sections: false,
 		live: true,
 		parentClass: 'form-group'
 	},
 
 	// Default english errors
-	errors: {
+	this.errors = {
 		required: 'Please enter a value',
 		requiredSelect: 'Please select an option',
 		requiredCheckbox: 'Please check the input',
@@ -40,10 +46,12 @@ var guard = {
 		minLength: 'The field has to contain at least {x} signs',
 		maxLength: 'The field has to contain at most {x} signs',
 		isLength: 'The field has to contain {x} signs',
+		minValue: 'The field value has to be greater than {x}',
+		maxValue: 'The field value has to be less than {x}'
 	},
 
 	// Rules
-	rules: {
+	this.rules = {
       required: function(node){
 			if(node.is('input')){
 				switch (node.attr('type')){
@@ -82,22 +90,28 @@ var guard = {
 	    },
 		isLength: function(node, isLength, length){
 	    	return node.val().length == isLength || guard.errors.isLength.replace('{x}', isLength);
-	    }
+	    },
+		minValue: function(node, minValue){
+			return node.val() >= minValue || guard.errors.minValue.replace('{x}', minValue);
+		},
+		maxValue: function(node, maxValue){
+			return node.val() <= maxValue || guard.errors.minValue.replace('{x}', maxValue);
+		}
 	},
 
 	// Public method: validate single field
-	validate: function(field){
+	this.validate = function(field){
 		var field = $(field),
 				rules = field.data('guard').split(','),
 				argument, valid;
 
 		$.each(rules, function(index,rule){
 
-      // If rule is complex, split name and argument
-      if(rule.indexOf('{') !== -1){
-        argument = rule.slice(rule.indexOf('{') + 1, rule.indexOf('}'));
-        rule = rule.slice(0, rule.indexOf('{'));
-      }
+	      // If rule is complex, split name and argument
+	      if(rule.indexOf('{') !== -1){
+	        argument = rule.slice(rule.indexOf('{') + 1, rule.indexOf('}'));
+	        rule = rule.slice(0, rule.indexOf('{'));
+	      }
 
 			// Validate only required and non-empty fields
 			if (field.attr('type') == 'text' || field.is('textarea')){
@@ -124,20 +138,20 @@ var guard = {
 	},
 
 	// Collect fields to validate
-	_collect: function(form, section){
+	this._collect = function(section){
 
 		// If there are no sections or a section is not specified get all fields
 		if(!this.options.sections || section === undefined){
-			this.fields = form.find('[data-guard]');
+			this.fields = this.$form.find('[data-guard]');
 		}
 
 		// Get the particular section
 		else {
-			this.fields = form.find(this.options.sections).eq(section).find('[data-guard]');
+			this.fields = this.$form.find(this.options.sections).eq(section).find('[data-guard]');
 		}
 	},
 
-	_cleanError: function(field){
+	this._cleanError = function(field){
 		var parent = field.parents('.' + this.options.parentClass),
 			  error = parent.find('.guard-error');
 		if (parent.hasClass('guard-invalid')){
@@ -148,7 +162,7 @@ var guard = {
 		}
 	},
 
-	_createError: function(field, error){
+	this._createError = function(field, error){
 		var parent = field.parents('.' + this.options.parentClass);
 		if (!parent.hasClass('guard-invalid')){
 			parent.addClass('guard-invalid').append('<div class="guard-error">' + error + '</div>');
@@ -157,7 +171,7 @@ var guard = {
 	},
 
 	// Public method: check section or form
-	check: function(form,section){
+	this.check = function(form,section){
 
 		// Reset state
 		guard.invalid = [];
@@ -172,55 +186,39 @@ var guard = {
 	},
 
 	// Init
-	init: function (options, errors, rules, form) {
-
-		var self = this,
-			prototype = Object.getPrototypeOf(self);
+	this.init = function () {
 
 		// Mix in the passed-in options with the default options
-		this.options = $.extend({}, this.options, options);
+		guard.options = $.extend({}, this.options, options);
 
 		// Mix in the passed custom errors with the default errors
-		this.errors = $.extend({}, this.errors, errors);
+		guard.errors = $.extend({}, this.errors, errors);
 
 		// Mix in the passed custom errors with the default errors
-		this.rules = $.extend({}, this.rules, rules);
+		guard.rules = $.extend({}, this.rules, rules);
 
-		// Save the element reference, both as a jQuery reference and a normal reference
-		this.form  = form;
-		this.$form = $(form);
-
-		// Bind events for live validation
-		if(this.options.live){
-			$('[data-guard]').bind('change', function(event, element){
+ 		// Bind events for live validation
+		if(guard.options.live == true){
+			guard.$form.find('[data-guard]').bind('change', function(event){
 				guard.validate(this);
 			});
 		}
 
 		// Call validation on submit
-		this.$form.submit(function(e){
+		guard.$form.submit(function(e){
 			e.preventDefault();
-			if(prototype.check(self.$form)){
-				if(typeof(self.options.beforeSubmit) == 'function' ) self.options.beforeSubmit.call(this,e);
-				if(typeof(self.options.onSubmit) == 'function' ) self.options.onSubmit.call(this,e);
+			if(guard.check()){
+				if(typeof(guard.options.beforeSubmit) == 'function' ) guard.options.beforeSubmit.call(this,e);
+				if(typeof(guard.options.onSubmit) == 'function' ) guard.options.onSubmit.call(this,e);
 				else this.submit();
 			}
 		});
+	};
 
-		// return this so that we can chain and use the bridge with less code.
-		return this;
-	}
+	this.init();
 
 };
 
-// Object.create support test, and fallback for browsers without it
-if (typeof Object.create !== "function") {
-	Object.create = function (o) {
-		function F() {}
-		F.prototype = o;
-		return new F();
-	};
-}
 
 (function($){
   // Start a plugin
@@ -228,16 +226,14 @@ if (typeof Object.create !== "function") {
     // Don't act on absent elements -via Paul Irish's advice
     if ( this.length ) {
       return this.each(function(){
-        // Create a new speaker object via the Prototypal Object.create
 
-		var myGuard = Object.create(guard);
-
-        // Run the initialization function of the guard
-        myGuard.init(options, errors, rules, this); // `this` refers to the element
+		var myGuard = new Guard (options, errors, rules, this);
 
         // Save the instance of the guard object in the element's data store
-        $.data(this, 'myguard', myGuard);
+        $.data(this, 'guardApi', myGuard);
+
       });
+
     }
   };
 })(jQuery);

@@ -8,6 +8,8 @@ var pl = {
     number: 'Proszę wprowadzić jedynie cyfry',
     minLength: 'Pole musi mieć co najmniej {x} znaków',
     maxLength: 'Pole może mieć co najwyżej {x} znaków',
+    minValue: 'Wartość pola musi być większa od {x}',
+    maxValue: 'Wartość pola musi być mniejsza od {x}',
     zipcode: 'Proszę podać poprawny kod pocztowy w formacie xx-xxx'
   },
   rules: {

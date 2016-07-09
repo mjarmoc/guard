@@ -35,18 +35,19 @@
 		<script src="../src/lang/pl.js"></script>
 		<script>
 			$(function() {
+				var form = $('form');
 				$('#check').click(function(e){
 					e.preventDefault();
-					guard.check(1);
+					myGuard.check(1);
 				});
-				$("form").guard({
+				var myGuard = form.guard({
 					sections: 'fieldset',
 					onSubmit: function(e){console.log(e);}
 				},
 				{
 					number: 'Please enter numbers only',
 				},
-				pl.rules).data('guard');
+				pl.rules).data('guardApi');
 			});
 		</script>
 	</body>

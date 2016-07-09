@@ -9,20 +9,18 @@
 		<div class="demo">
 			<h1>Guard</h1>
 			<div class="demo-wrap">
-				<form action="submit.html">
+				<form id="first" action="submit.html">
 					<fieldset>
 						<h2>First form</h2>
 							<div class="form-group"><label>Required</label><input type="text" data-guard="required"></div>
 					</fieldset>
-					<button id="check">check second fieldset</button>
 					<input type="submit" value="submit form">
 				</form>
-				<form action="submit2.html">
+				<form id="second" action="submit2.html">
 					<fieldset>
 						<h2>Second form</h2>
 							<div class="form-group"><label>Required</label><input type="text" data-guard="required"></div>
 					</fieldset>
-					<button id="check">check second fieldset</button>
 					<input type="submit" value="submit form">
 				</form>
 			</div>
@@ -32,18 +30,20 @@
 		<script src="../src/lang/pl.js"></script>
 		<script>
 			$(function() {
-				$('#check').click(function(e){
-					e.preventDefault();
-					guard.check(1);
-				});
-				$("form").guard({
+
+				var firstGuard = $('#first').guard({
 					sections: 'fieldset',
-					onSubmit: function(e){console.log(e);}
+					live: false,
+					onSubmit: function(e){console.log('a');}
 				},
-				{
-					number: 'Please enter numbers only',
+				pl.errors,
+				pl.rules).data('guardApi');
+				var firstGuard = $('#second').guard({
+					sections: 'fieldset',
+					live: true,
+					onSubmit: function(e){console.log('b');}
 				},
-				pl.rules).data('guard');
+				pl.rules).data('guardApi');
 			});
 		</script>
 	</body>

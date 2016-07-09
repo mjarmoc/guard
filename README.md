@@ -6,6 +6,7 @@ Jquery plugin that guards your forms.
 
 * As simple and fast as it could be.
 * Allows you to validate single fields, custom sections of form (i.e.fieldsets) and whole form.
+* Multiform validation
 * Provides public methods, to check validation inside your own code.
 * Behaves well with form nodes styling scripts.
 * Allows you to pass custom error messages and validation rules.
@@ -22,31 +23,18 @@ Make a plugin instance:
 
 for example:
 
-```js
-var guard = $(#form).guard(
-	{
-		sections:'fieldset', 
-		onSubmit: function(e){this.submit;}
-	}, 
-	errors, 
-	rules
-);
-```
+`var guard = $(#form).guard({sections:'fieldset', onSubmit: function(e){this.submit;}}, errors, rules);`
 
 Guard chosen fields with a rules using `data-guard="rulename"`:
 
-```html
-<input type="text" data-guard="required">
-```
+`<input type="text" data-guard="required">`
 
 Suppose that you have a long form with 4 steps / parts / sections. Suppose you want to validate a section, before loading the next one. Just use the `check` public method:
 
-```js
-$('.goToNextSection').click(function(e){
+`$('.goToNextSection').click(function(e){
     e.preventDefault();
     if (guard.check($(this).parents('fieldset').index()) $.get('step2.html');
-  });
-```
+  });`
 
 # Languages
 You can pass in custom or translated error messages. Simply pass in an object structures as the on in file `src/lang/pl.js'
@@ -61,10 +49,12 @@ You can pass in custom or translated error messages. Simply pass in an object st
 * required
 * number
 * email
-* maxLength[x]
-* minLength[x]
+* maxLength{x}
+* minLength{x}
+* minValue{x}
+* maxValue{x}
 
-You can also pass in custom rules.
+You can also pass in custom rules. See `src/lang/pl.js` for an example.
 
 # Public Methods
 * `check(form, section)` : the form is a jquery selector and the `section` is an `int` and represents the section index number : returns `boolean` || check if the section is valid (there are no invalid fields). If the section argument is empty, then it will check the whole form.
@@ -75,7 +65,7 @@ Every callback function has the form set as `this` value and `event` passed to i
 * `onSubmit(e)` : called during submit event, if the form is valid. If not specified, the form will normally submit.
 
 # Version
-1.0.0
+1.2.0
 
 # To Do
 * Mocha Tests
